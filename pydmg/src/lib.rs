@@ -1,14 +1,24 @@
 use pyo3::prelude::*;
 
-/// Formats the sum of two numbers as string.
-#[pyfunction]
-fn add(a: usize, b: usize) -> PyResult<usize> {
-    Ok(libdmg::add(a, b))
+#[pyclass]
+struct Cartridge {}
+
+#[pymethods]
+impl Cartridge {
+    #[new]
+    fn new(rom: &[u8], sram: Option<&[u8]>) -> Self {
+        println!(
+            "rom: {} bytes, sram: {} bytes",
+            rom.len(),
+            sram.map(|s| s.len()).unwrap_or(0)
+        );
+
+        Self {}
+    }
 }
 
-/// A Python module implemented in Rust.
 #[pymodule]
 fn pydmg(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(add, m)?)?;
+    m.add_class::<Cartridge>()?;
     Ok(())
 }
