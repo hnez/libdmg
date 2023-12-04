@@ -5,7 +5,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
+clap = { version = "4.4", features = ["derive"] }
+libdmg = { path = "../libdmg" }
 log = "0.4"
 minifb = "0.25"
 pretty_env_logger = "0.5"
-libdmg = { path = "../libdmg" }

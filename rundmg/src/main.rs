@@ -1,3 +1,4 @@
+use clap::Parser;
 use libdmg::{Button, Cartridge, Dmg};
 
 mod ui;
@@ -15,15 +16,25 @@ const BUTTON_MAP: [(Key, Button); 8] = [
     (Key::Down, Button::Down),
 ];
 
+#[derive(Parser)]
+struct Args {
+    #[arg(short, long, default_value = "boot.gb")]
+    bootrom: String,
+    rom: String,
+    save: Option<String>,
+}
+
 fn main() -> anyhow::Result<()> {
     pretty_env_logger::init();
+
+    let args = Args::parse();
 
     let mut window = ui::Ui::new()?;
 
     let mut dmg = {
-        let rom = std::fs::read("pr.gb")?;
-        let bootrom = std::fs::read("boot.gb")?;
-        let sram = std::fs::read("pr.sav").ok();
+        let rom = std::fs::read(args.rom)?;
+        let bootrom = std::fs::read(args.bootrom)?;
+        let sram = args.save.and_then(|s| std::fs::read(s).ok());
 
         let cartridge = Cartridge::new(rom, sram);
 
