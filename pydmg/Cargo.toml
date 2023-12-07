@@ -8,5 +8,6 @@ name = "pydmg"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = "0.19.0"
 libdmg = { path = "../libdmg" }
+numpy = "0.20"
+pyo3 = "0.20"

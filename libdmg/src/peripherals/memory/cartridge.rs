@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use log::{error, info};
 
+#[derive(Clone)]
 pub struct Cartridge {
     rom: Arc<[u8]>,
     ram: Vec<u8>,
