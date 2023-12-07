@@ -147,11 +147,11 @@ impl Video {
     }
 
     fn cycle_in_frame(&self, cycle: u64) -> u64 {
-        (cycle - self.enable_cycle) % CYCLES_PER_FRAME
+        cycle.saturating_sub(self.enable_cycle) % CYCLES_PER_FRAME
     }
 
     fn frame(&self, cycle: u64) -> u64 {
-        (cycle - self.enable_cycle) / CYCLES_PER_FRAME
+        cycle.saturating_sub(self.enable_cycle) / CYCLES_PER_FRAME
     }
 
     fn cycle_in_line(&self, cycle: u64) -> u64 {
@@ -369,7 +369,7 @@ impl Video {
     }
 
     fn render_until(&mut self, cycle: u64) {
-        while (self.render_cycle + CYCLES_PER_LINE) < cycle {
+        while self.render_cycle.saturating_add(CYCLES_PER_LINE) < cycle {
             assert!(self.cycle_in_line(self.render_cycle) == 0);
             assert!(self.line(self.render_cycle) < (LCD_Y as _));
 
